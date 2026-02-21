@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>opencomputer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --white: #ffffff;
+      --black: #111111;
+      --gray: #888888;
+      --light-gray: #e0e0e0;
+      --blink-cursor: #111111;
+    }
+
+    body {
+      background: var(--white);
+      color: var(--black);
+      font-family: 'IBM Plex Mono', monospace;
+      overflow-x: hidden;
+      cursor: default;
+    }
+
+    ::selection {
+      background: var(--black);
+      color: var(--white);
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 100;
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 2px solid var(--black);
+    }
+
+    .logo {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 14px;
+      letter-spacing: -0.5px;
+    }
+
+    .logo .blink {
+      animation: blink 1s step-end infinite;
+    }
+
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 32px;
+    }
+
+    nav a {
+      color: var(--black);
+      text-decoration: none;
+      font-family: 'VT323', monospace;
+      font-size: 20px;
+      position: relative;
+    }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--black);
+      transition: width 0.2s;
+    }
+
+    nav a:hover::after {
+      width: 100%;
+    }
+
+    .nav-cta {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 10px;
+      padding: 10px 20px;
+      border: 2px solid var(--black);
+      background: var(--black);
+      color: var(--white);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .nav-cta:hover {
+      background: var(--white);
+      color: var(--black);
+    }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 120px 40px 60px;
+      text-align: center;
+      position: relative;
+    }
+
+    .hero-badge {
+      font-family: 'VT323', monospace;
+      font-size: 18px;
+      color: var(--gray);
+      margin-bottom: 24px;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards;
+    }
+
+    .hero-badge span {
+      border: 1px solid var(--light-gray);
+      padding: 6px 16px;
+      display: inline-block;
+    }
+
+    .hero h1 {
+      font-family: 'Press Start 2P', cursive;
+      font-size: clamp(18px, 3.5vw, 42px);
+      line-height: 1.8;
+      max-width: 800px;
+      opacity: 0;
+      animation: fadeUp 0.6s ease 0.15s forwards;
+    }
+
+    .hero-sub {
+      font-family: 'VT323', monospace;
+      font-size: 28px;
+      color: var(--gray);
+      margin-top: 28px;
+      max-width: 640px;
+      line-height: 1.5;
+      opacity: 0;
+      animation: fadeUp 0.6s ease 0.3s forwards;
+    }
+
+    /* ── IBM COMPUTER ── */
+    .computer-container {
+      margin: 48px 0 40px;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.45s forwards;
+      position: relative;
+    }
+
+    .computer-art {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      line-height: 1.25;
+      white-space: pre;
+      color: var(--black);
+      position: relative;
+      display: inline-block;
+    }
+
+    .screen-text {
+      position: absolute;
+      top: 42px;
+      left: 82px;
+      font-family: 'VT323', monospace;
+      font-size: 14px;
+      color: var(--black);
+      text-align: left;
+      line-height: 1.6;
+      width: 170px;
+      overflow: hidden;
+    }
+
+    .screen-text .line {
+      opacity: 0;
+      animation: typeLine 0.3s ease forwards;
+    }
+
+    .screen-text .line:nth-child(1) { animation-delay: 1.2s; }
+    .screen-text .line:nth-child(2) { animation-delay: 1.6s; }
+    .screen-text .line:nth-child(3) { animation-delay: 2.0s; }
+    .screen-text .line:nth-child(4) { animation-delay: 2.4s; }
+    .screen-text .line:nth-child(5) { animation-delay: 2.8s; }
+
+    .cursor-blink {
+      display: inline-block;
+      width: 8px;
+      height: 14px;
+      background: var(--black);
+      animation: blink 0.8s step-end infinite;
+      vertical-align: middle;
+      margin-left: 2px;
+    }
+
+    /* ── CTA BUTTONS ── */
+    .cta-row {
+      display: flex;
+      gap: 16px;
+      margin-top: 12px;
+      opacity: 0;
+      animation: fadeUp 0.6s ease 0.6s forwards;
+    }
+
+    .btn-primary {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 11px;
+      padding: 16px 32px;
+      border: 2px solid var(--black);
+      background: var(--black);
+      color: var(--white);
+      cursor: pointer;
+      transition: all 0.15s;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-primary:hover {
+      background: var(--white);
+      color: var(--black);
+      transform: translate(-2px, -2px);
+      box-shadow: 4px 4px 0 var(--black);
+    }
+
+    .btn-secondary {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 11px;
+      padding: 16px 32px;
+      border: 2px solid var(--black);
+      background: var(--white);
+      color: var(--black);
+      cursor: pointer;
+      transition: all 0.15s;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-secondary:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 4px 4px 0 var(--black);
+    }
+
+    /* ── SCROLL INDICATOR ── */
+    .scroll-hint {
+      position: absolute;
+      bottom: 32px;
+      font-family: 'VT323', monospace;
+      font-size: 18px;
+      color: var(--gray);
+      animation: bounce 2s ease infinite;
+    }
+
+    .scroll-hint::after {
+      content: '  v  v  v';
+      display: block;
+      text-align: center;
+      margin-top: 4px;
+    }
+
+    /* ── MARQUEE ── */
+    .marquee-section {
+      border-top: 2px solid var(--black);
+      border-bottom: 2px solid var(--black);
+      padding: 14px 0;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .marquee-track {
+      display: inline-block;
+      animation: marquee 20s linear infinite;
+    }
+
+    .marquee-track span {
+      font-family: 'VT323', monospace;
+      font-size: 22px;
+      margin: 0 48px;
+      color: var(--black);
+    }
+
+    /* ── FEATURES ── */
+    .features {
+      padding: 100px 40px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 10px;
+      color: var(--gray);
+      margin-bottom: 12px;
+      letter-spacing: 2px;
+    }
+
+    .section-title {
+      font-family: 'Press Start 2P', cursive;
+      font-size: clamp(14px, 2.5vw, 24px);
+      line-height: 2;
+      margin-bottom: 60px;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2px;
+      background: var(--black);
+      border: 2px solid var(--black);
+    }
+
+    .feature-card {
+      background: var(--white);
+      padding: 40px 32px;
+      transition: all 0.2s;
+      position: relative;
+    }
+
+    .feature-card:hover {
+      background: var(--black);
+      color: var(--white);
+    }
+
+    .feature-icon {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 24px;
+      margin-bottom: 20px;
+      display: block;
+    }
+
+    .feature-card h3 {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 11px;
+      margin-bottom: 12px;
+      line-height: 1.6;
+    }
+
+    .feature-card p {
+      font-family: 'VT323', monospace;
+      font-size: 20px;
+      line-height: 1.4;
+      color: var(--gray);
+    }
+
+    .feature-card:hover p {
+      color: var(--light-gray);
+    }
+
+    /* ── HOW IT WORKS ── */
+    .how-it-works {
+      padding: 100px 40px;
+      background: var(--black);
+      color: var(--white);
+    }
+
+    .how-it-works .section-label {
+      color: var(--gray);
+    }
+
+    .how-it-works .section-title {
+      color: var(--white);
+    }
+
+    .steps {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .step {
+      display: flex;
+      gap: 24px;
+      padding: 32px 0;
+      border-bottom: 1px solid #333;
+      align-items: flex-start;
+    }
+
+    .step-num {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 28px;
+      color: #444;
+      min-width: 60px;
+    }
+
+    .step h3 {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 12px;
+      margin-bottom: 8px;
+      line-height: 1.8;
+    }
+
+    .step p {
+      font-family: 'VT323', monospace;
+      font-size: 22px;
+      color: var(--gray);
+      line-height: 1.4;
+    }
+
+    /* ── TERMINAL DEMO ── */
+    .demo-section {
+      padding: 100px 40px;
+      text-align: center;
+    }
+
+    .terminal {
+      max-width: 650px;
+      margin: 40px auto 0;
+      border: 2px solid var(--black);
+      text-align: left;
+    }
+
+    .terminal-bar {
+      background: var(--black);
+      color: var(--white);
+      padding: 8px 16px;
+      font-family: 'Press Start 2P', cursive;
+      font-size: 9px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .terminal-dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .terminal-dots span {
+      width: 10px;
+      height: 10px;
+      border: 1px solid #555;
+      display: inline-block;
+    }
+
+    .terminal-body {
+      padding: 24px;
+      font-family: 'VT323', monospace;
+      font-size: 20px;
+      line-height: 1.8;
+      min-height: 220px;
+    }
+
+    .terminal-body .prompt {
+      color: var(--gray);
+    }
+
+    .terminal-body .cmd {
+      color: var(--black);
+    }
+
+    .terminal-body .output {
+      color: var(--gray);
+      padding-left: 0;
+    }
+
+    /* ── SAY MORE ── */
+    .say-more {
+      padding: 100px 40px;
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .say-more .section-title {
+      margin-bottom: 32px;
+    }
+
+    .say-more p {
+      font-family: 'VT323', monospace;
+      font-size: 24px;
+      color: var(--gray);
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      margin-top: 40px;
+    }
+
+    .pill {
+      font-family: 'VT323', monospace;
+      font-size: 18px;
+      padding: 8px 20px;
+      border: 2px solid var(--black);
+      display: inline-block;
+      transition: all 0.15s;
+    }
+
+    .pill:hover {
+      background: var(--black);
+      color: var(--white);
+      transform: translate(-1px, -1px);
+      box-shadow: 2px 2px 0 var(--black);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 2px solid var(--black);
+      padding: 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .footer-logo {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 12px;
+    }
+
+    footer p {
+      font-family: 'VT323', monospace;
+      font-size: 18px;
+      color: var(--gray);
+    }
+
+    /* ── PIXEL DECORATIONS ── */
+    .pixel-star {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: var(--black);
+      opacity: 0.1;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    @keyframes typeLine {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(6px); }
+    }
+
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* ── SCROLL REVEAL ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 16px 20px; }
+      nav ul { display: none; }
+      .hero { padding: 100px 20px 60px; }
+      .feature-grid { grid-template-columns: 1fr; }
+      .features, .how-it-works, .demo-section, .say-more { padding: 60px 20px; }
+      .computer-art { font-size: 7px; }
+      .screen-text { font-size: 9px; top: 28px; left: 54px; width: 110px; }
+      .cta-row { flex-direction: column; align-items: center; }
+      footer { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="logo">opencomputer<span class="blink">_</span></div>
+    <ul>
+      <li><a href="#features">FEATURES</a></li>
+      <li><a href="#how">HOW IT WORKS</a></li>
+      <li><a href="#demo">DEMO</a></li>
+    </ul>
+    <button class="nav-cta">GET STARTED</button>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-badge"><span>C:\OPENCOMPUTER> ready_</span></div>
+
+    <h1>give every user a warm cloud computer</h1>
+
+    <p class="hero-sub">
+      Secure cloud computers for AI agents and code execution.
+      Boots in milliseconds. Runs anything. No cold starts.
+    </p>
+
+    <!-- IBM COMPUTER ASCII ART -->
+    <div class="computer-container">
+      <div class="computer-art">
+         _______________________________________________
+        |  ___________________________________________  |
+        | |                                           | |
+        | |                                           | |
+        | |                                           | |
+        | |                                           | |
+        | |                                           | |
+        | |                                           | |
+        | |                                           | |
+        | |                                           | |
+        | |___________________________________________| |
+        |    _______________________________            |
+        |   |  ___  ___  ___  ___  ___  ___ |  _    _   |
+        |   | |___||___||___||___||___||___|| |_|  |_|  |
+        |   |_____________________________|             |
+        |_______________________________________________|
+              |                               |
+         _____|_______________________________|_____
+        |  _____________________________________    |
+        | |  _  _  _  _  _  _  _  _  _  _  _  |   |
+        | | |_||_||_||_||_||_||_||_||_||_||_|  |   |
+        | | |_||_||_||_||_||_||_||_||_||_||_|  |   |
+        | | |_||_||_||_||_||_||_||_||_||_||_|  |   |
+        | |   |___________________________|    |   |
+        | |____________________________________|   |
+        |__________________________________________|</div>
+      <div class="screen-text">
+        <div class="line">C:\> opencomputer</div>
+        <div class="line">booting vm......</div>
+        <div class="line">firecracker.. OK</div>
+        <div class="line">filesystem... OK</div>
+        <div class="line">ready_ <span class="cursor-blink"></span></div>
+      </div>
+    </div>
+
+    <div class="cta-row">
+      <a href="#" class="btn-primary">START BUILDING</a>
+      <a href="#demo" class="btn-secondary">SEE DEMO</a>
+    </div>
+
+    <div class="scroll-hint">scroll down</div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee-section">
+    <div class="marquee-track">
+      <span>SUB-200MS BOOT</span>
+      <span>*</span>
+      <span>CODE EXECUTION</span>
+      <span>*</span>
+      <span>AI AGENTS</span>
+      <span>*</span>
+      <span>PERSISTENT FILESYSTEM</span>
+      <span>*</span>
+      <span>ANY LANGUAGE</span>
+      <span>*</span>
+      <span>SECURE ISOLATION</span>
+      <span>*</span>
+      <span>SUB-200MS BOOT</span>
+      <span>*</span>
+      <span>CODE EXECUTION</span>
+      <span>*</span>
+      <span>AI AGENTS</span>
+      <span>*</span>
+      <span>PERSISTENT FILESYSTEM</span>
+      <span>*</span>
+      <span>ANY LANGUAGE</span>
+      <span>*</span>
+      <span>SECURE ISOLATION</span>
+      <span>*</span>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <section class="features" id="features">
+    <div class="reveal">
+      <p class="section-label">// FEATURES</p>
+      <h2 class="section-title">not a sandbox. a computer.</h2>
+    </div>
+
+    <div class="feature-grid reveal">
+      <div class="feature-card">
+        <span class="feature-icon">>>_</span>
+        <h3>INSTANT BOOT</h3>
+        <p>Warm computers boot in under 200ms. No cold starts. Your agents never wait. Firecracker microVMs under the hood.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">{;}</span>
+        <h3>RUN ANYTHING</h3>
+        <p>Python, Node, Rust, Go, C++ &mdash; any language, any package, any system library. It's a real computer, not a REPL.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">[=]</span>
+        <h3>PERSISTENT STATE</h3>
+        <p>Filesystem survives restarts. Install once, run forever. Databases, files, configs &mdash; all persisted between sessions.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">|X|</span>
+        <h3>FULL ISOLATION</h3>
+        <p>Every computer runs in its own microVM. Hardware-level isolation. Run untrusted code without losing sleep.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how-it-works" id="how">
+    <div class="reveal" style="max-width:700px;margin:0 auto;">
+      <p class="section-label">// HOW IT WORKS</p>
+      <h2 class="section-title" style="color:var(--white);">three lines to a running computer</h2>
+    </div>
+
+    <div class="steps reveal">
+      <div class="step">
+        <span class="step-num">01</span>
+        <div>
+          <h3>CREATE A COMPUTER</h3>
+          <p>One API call. Choose your base image, install your packages. Or use ours &mdash; Python, Node, and more ship ready.</p>
+        </div>
+      </div>
+      <div class="step">
+        <span class="step-num">02</span>
+        <div>
+          <h3>EXECUTE CODE</h3>
+          <p>Send code. Get output. Stream stdout. Run shell commands. Your agent has a full Linux machine at its fingertips.</p>
+        </div>
+      </div>
+      <div class="step">
+        <span class="step-num">03</span>
+        <div>
+          <h3>SCALE TO THOUSANDS</h3>
+          <p>Spin up 10 or 10,000 computers. Warm pools keep them ready. Scale back to zero when idle. Pay only for what runs.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DEMO TERMINAL -->
+  <section class="demo-section" id="demo">
+    <div class="reveal">
+      <p class="section-label">// DEMO</p>
+      <h2 class="section-title">see it run</h2>
+    </div>
+
+    <div class="terminal reveal">
+      <div class="terminal-bar">
+        <span>OPENCOMPUTER v1.0</span>
+        <div class="terminal-dots"><span></span><span></span><span></span></div>
+      </div>
+      <div class="terminal-body" id="terminal-body">
+        <div><span class="prompt">$</span> <span class="cmd">pip install opencomputer</span></div>
+        <br>
+        <div><span class="prompt">&gt;&gt;&gt;</span> <span class="cmd">from opencomputer import Computer</span></div>
+        <div><span class="prompt">&gt;&gt;&gt;</span> <span class="cmd">c = Computer.create()</span></div>
+        <div class="output"># booted in 147ms</div>
+        <br>
+        <div><span class="prompt">&gt;&gt;&gt;</span> <span class="cmd">c.exec("python3 -c 'print(2**128)'")</span></div>
+        <div class="output">340282366920938463463374607431768211456</div>
+        <br>
+        <div><span class="prompt">&gt;&gt;&gt;</span> <span class="cmd">c.exec("uname -a")</span></div>
+        <div class="output">Linux opencomputer 6.1.0 x86_64 GNU/Linux</div>
+        <br>
+        <div><span class="prompt">&gt;&gt;&gt;</span> <span class="cmd">c.upload("data.csv", "/home/user/data.csv")</span></div>
+        <div><span class="prompt">&gt;&gt;&gt;</span> <span class="cmd">result = c.exec("python3 analyze.py")</span></div>
+        <div class="output">&gt; analysis complete. 3 charts saved.</div>
+        <div class="output">&gt; _<span class="cursor-blink"></span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SAY MORE -->
+  <section class="say-more reveal">
+    <p class="section-label">// WHY OPENCOMPUTER</p>
+    <h2 class="section-title">a computer is more than a container</h2>
+    <p>
+      Containers are stateless. Lambdas time out. REPLs can't install packages.
+      A computer does what computers do &mdash; it runs your code, keeps your files, and stays warm until you're done.
+    </p>
+    <p>
+      Built for the age of AI agents. Let your LLM write code, execute it, see the output, iterate &mdash;
+      on a real machine with a real filesystem, not a toy.
+    </p>
+
+    <div class="pill-row">
+      <span class="pill">firecracker microVMs</span>
+      <span class="pill">sub-200ms boot</span>
+      <span class="pill">persistent filesystem</span>
+      <span class="pill">warm pools</span>
+      <span class="pill">any language</span>
+      <span class="pill">file upload/download</span>
+      <span class="pill">streaming stdout</span>
+      <span class="pill">custom images</span>
+      <span class="pill">scale to zero</span>
+      <span class="pill">hardware isolation</span>
+    </div>
+  </section>
+
+  <!-- BIG CTA -->
+  <section style="padding:80px 40px;text-align:center;border-top:2px solid var(--black);" class="reveal">
+    <h2 style="font-family:'Press Start 2P',cursive;font-size:clamp(14px,2.5vw,24px);line-height:2;margin-bottom:32px;">
+      stop sandboxing.<br>start computing.
+    </h2>
+    <a href="#" class="btn-primary">GET STARTED FREE</a>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">opencomputer<span class="blink" style="animation:blink 1s step-end infinite;">_</span></div>
+    <p>warm cloud computers for AI agents</p>
+    <p>&copy; 2026 opencomputer</p>
+  </footer>
+
+  <script>
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.15 });
+
+    reveals.forEach(el => observer.observe(el));
+
+    // Pixel stars scattered in hero
+    const hero = document.querySelector('.hero');
+    for (let i = 0; i < 30; i++) {
+      const star = document.createElement('div');
+      star.className = 'pixel-star';
+      star.style.left = Math.random() * 100 + '%';
+      star.style.top = Math.random() * 100 + '%';
+      star.style.animationDelay = Math.random() * 3 + 's';
+      hero.appendChild(star);
+    }
+  </script>
+
+</body>
+</html>

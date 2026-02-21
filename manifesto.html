@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>opencomputer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #fff;
+      color: #111;
+      font-family: 'Inter', -apple-system, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    ::selection {
+      background: #111;
+      color: #fff;
+    }
+
+    /* ── NAV ── */
+    nav {
+      padding: 24px 0;
+      max-width: 720px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-family: 'Geist Mono', monospace;
+      font-size: 15px;
+      font-weight: 500;
+      color: #111;
+      letter-spacing: -0.3px;
+    }
+
+    .nav-link {
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      color: #888;
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .nav-link:hover {
+      color: #111;
+    }
+
+    /* ── MAIN ── */
+    main {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 80px 24px 120px;
+    }
+
+    /* ── HERO LINE ── */
+    .hero-line {
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(42px, 6vw, 64px);
+      line-height: 1.15;
+      letter-spacing: -1.5px;
+      margin-bottom: 80px;
+      color: #111;
+    }
+
+    /* ── PROSE ── */
+    .prose {
+      margin-bottom: 56px;
+    }
+
+    .prose p {
+      font-family: 'Inter', sans-serif;
+      font-size: 17px;
+      line-height: 1.75;
+      color: #111;
+      margin-bottom: 28px;
+      letter-spacing: -0.1px;
+    }
+
+    .prose p:last-child {
+      margin-bottom: 0;
+    }
+
+    .prose p .muted {
+      color: #888;
+    }
+
+    .prose p em {
+      font-family: 'Instrument Serif', serif;
+      font-style: italic;
+      font-size: 19px;
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      width: 48px;
+      height: 1px;
+      background: #ddd;
+      margin: 56px 0;
+    }
+
+    /* ── CODE BLOCK ── */
+    .code-block {
+      margin: 56px 0;
+      border: 1px solid #e8e8e8;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .code-bar {
+      background: #fafafa;
+      border-bottom: 1px solid #e8e8e8;
+      padding: 10px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .code-bar span {
+      font-family: 'Geist Mono', monospace;
+      font-size: 12px;
+      color: #888;
+    }
+
+    .code-dots {
+      display: flex;
+      gap: 5px;
+    }
+
+    .code-dots span {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #ddd;
+    }
+
+    .code-body {
+      padding: 24px;
+      background: #fff;
+      font-family: 'Geist Mono', monospace;
+      font-size: 14px;
+      line-height: 1.8;
+      color: #111;
+      overflow-x: auto;
+    }
+
+    .code-body .dim {
+      color: #aaa;
+    }
+
+    .code-body .str {
+      color: #111;
+    }
+
+    /* ── CALLOUT ── */
+    .callout {
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(28px, 4vw, 38px);
+      line-height: 1.35;
+      letter-spacing: -0.8px;
+      color: #111;
+      margin: 64px 0;
+    }
+
+    /* ── CTA ── */
+    .cta-section {
+      margin-top: 80px;
+      padding-top: 56px;
+      border-top: 1px solid #e8e8e8;
+    }
+
+    .cta-row {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 12px 28px;
+      border-radius: 6px;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.15s;
+      cursor: pointer;
+    }
+
+    .btn-dark {
+      background: #111;
+      color: #fff;
+      border: 1px solid #111;
+    }
+
+    .btn-dark:hover {
+      background: #333;
+    }
+
+    .btn-light {
+      background: #fff;
+      color: #111;
+      border: 1px solid #ddd;
+    }
+
+    .btn-light:hover {
+      border-color: #111;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 40px 24px;
+      border-top: 1px solid #e8e8e8;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    footer span {
+      font-family: 'Geist Mono', monospace;
+      font-size: 13px;
+      color: #aaa;
+    }
+
+    /* ── FADE IN ── */
+    .fade {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .fade.in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .fade:nth-child(2) { transition-delay: 0.08s; }
+    .fade:nth-child(3) { transition-delay: 0.16s; }
+    .fade:nth-child(4) { transition-delay: 0.24s; }
+    .fade:nth-child(5) { transition-delay: 0.32s; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 640px) {
+      main { padding: 48px 20px 80px; }
+      nav { padding: 20px; max-width: 100%; }
+      footer { padding: 32px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <span class="logo">opencomputer</span>
+    <a href="index.html" class="nav-link">home</a>
+  </nav>
+
+  <main>
+
+    <h1 class="hero-line fade">Agents are becoming the application.</h1>
+
+    <div class="prose fade">
+      <p>
+        Today, people build an app and the app calls an agent to do a task. The app is the product, the agent is a feature. That's <em>sandbox-as-tool</em> territory.
+      </p>
+      <p>
+        We think the agent <em>is</em> the product. Someone builds a support agent, a research agent, a coding agent&mdash;that agent needs to live somewhere, have a URL, and run. Stop treating it like a function call. Deploy it like a service.
+      </p>
+    </div>
+
+    <div class="callout fade">And services need computers, not sandboxes.</div>
+
+    <div class="divider fade"></div>
+
+    <div class="prose fade">
+      <p>
+        Every OpenComputer is a real VM. Not a microVM, not a container. A full Linux machine with root access. It hibernates when idle and wakes when you need it. No timeouts, no snapshots to manage. Your computer is just <em>there</em>.
+      </p>
+      <p>
+        Secrets live in a vault. Checkpoint anytime. Break something, roll back in a second.
+      </p>
+    </div>
+
+    <div class="code-block fade">
+      <div class="code-bar">
+        <div class="code-dots"><span></span><span></span><span></span></div>
+        <span>terminal</span>
+      </div>
+      <div class="code-body">
+<span class="dim">$</span> curl -X POST api.opencomputer.dev/v1/computers \
+  <span class="dim">-H</span> <span class="str">"Authorization: Bearer $API_KEY"</span> \
+  <span class="dim">-d</span> <span class="str">'{"template": "claude-agent-sdk"}'</span>
+      </div>
+    </div>
+
+    <div class="cta-section fade">
+      <div class="cta-row">
+        <a href="#" class="btn btn-dark">Get started</a>
+        <a href="#" class="btn btn-light">Read the docs</a>
+      </div>
+    </div>
+
+  </main>
+
+  <footer>
+    <span>opencomputer</span>
+    <span>&copy; 2026</span>
+  </footer>
+
+  <script>
+    const fades = document.querySelectorAll('.fade');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) e.target.classList.add('in');
+      });
+    }, { threshold: 0.1 });
+    fades.forEach(el => obs.observe(el));
+  </script>
+
+</body>
+</html>
